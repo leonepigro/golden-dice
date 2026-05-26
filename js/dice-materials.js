@@ -14,9 +14,10 @@ function makeCanvas(drawFn) {
 
 function goldGradient(ctx) {
   const g = ctx.createLinearGradient(0, 0, TEX_SIZE, TEX_SIZE);
-  g.addColorStop(0, '#f59e0b');
-  g.addColorStop(0.5, '#fbbf24');
-  g.addColorStop(1, '#d97706');
+  g.addColorStop(0, '#fef3c7');
+  g.addColorStop(0.35, '#fde68a');
+  g.addColorStop(0.7, '#fcd34d');
+  g.addColorStop(1, '#f59e0b');
   return g;
 }
 
