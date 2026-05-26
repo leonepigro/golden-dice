@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Golden Dice Tests</title>
+<style>body{font-family:monospace;padding:16px;background:#12100a;color:#fde68a} .pass{color:#22c55e} .fail{color:#ef4444}</style>
+</head>
+<body>
+<pre id="out"></pre>
+<script type="module">
+import { saveSession, loadSessions } from '../js/sessions.js';
+
+const out = document.getElementById('out');
+let passed = 0, failed = 0;
+
+function test(name, fn) {
+  try { fn(); out.innerHTML += `<span class="pass">✓ ${name}</span>\n`; passed++; }
+  catch(e) { out.innerHTML += `<span class="fail">✗ ${name}: ${e.message}</span>\n`; failed++; }
+}
+function eq(a, b) {
+  if (JSON.stringify(a) !== JSON.stringify(b))
+    throw new Error(`got ${JSON.stringify(a)}, want ${JSON.stringify(b)}`);
+}
+
+// ---- sessions tests ----
+test('loadSessions returns defaults when localStorage empty', () => {
+  localStorage.clear();
+  const s = loadSessions();
+  eq(s.length, 5);
+  eq(s[0].csv, '1, X, 2, No Gol, Gol, Under, Over');
+});
+
+test('saveSession prepends new session', () => {
+  localStorage.clear();
+  const s0 = loadSessions();
+  const s1 = saveSession(s0, 'A, B, C');
+  eq(s1[0].csv, 'A, B, C');
+  eq(s1[0].label, 'A');
+});
+
+test('saveSession caps at 5', () => {
+  localStorage.clear();
+  let s = loadSessions(); // 5 defaults
+  s = saveSession(s, 'Extra');
+  eq(s.length, 5);
+  eq(s[0].csv, 'Extra');
+});
+
+test('saveSession does not duplicate existing csv', () => {
+  localStorage.clear();
+  let s = loadSessions();
+  const csv = s[2].csv;
+  s = saveSession(s, csv);
+  eq(s.length, 5);
+  eq(s[0].csv, csv);
+});
+
+out.innerHTML += `\n<strong>${passed} passed, ${failed} failed</strong>\n`;
+</script>
+</body></html>
