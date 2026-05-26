@@ -17,7 +17,7 @@ export function getDiceType(n) {
 
 export function getFontSize(text) {
   const len = text.length;
-  if (len <= 2) return 120;
-  if (len <= 5) return 80;
-  return 52;
+  if (len <= 2) return 80;
+  if (len <= 5) return 56;
+  return 36;
 }
