@@ -17,31 +17,38 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', e => {
+  // Fix 1: skipWaiting inside waitUntil so activation waits for cache fill
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS))
+    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    caches.match(e.request).then(async cached => {
       if (cached) return cached;
-      return fetch(e.request).then(response => {
-        if (!response || response.status !== 200 || response.type === 'error') return response;
+      const response = await fetch(e.request);
+      // Fix 2: don't cache opaque responses (CDN cross-origin with status 0) or errors
+      if (
+        response &&
+        response.status === 200 &&
+        response.type !== 'error' &&
+        response.type !== 'opaque'
+      ) {
         const clone = response.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return response;
-      });
+        // Fix 3: await the cache put to surface errors (non-blocking for caller)
+        const cache = await caches.open(CACHE);
+        await cache.put(e.request, clone);
+      }
+      return response;
     })
   );
 });
