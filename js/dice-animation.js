@@ -14,6 +14,7 @@ export function createAnimator(mesh, onDone) {
   let decelStartTime = 0;
   let decelStartQuat = new THREE.Quaternion();
   let targetQuat = new THREE.Quaternion();
+  let lastTimestamp = 0;
 
   function roll(faceIndex, faceQuaternions) {
     if (state !== 'idle' && state !== 'done') return false;
@@ -29,9 +30,12 @@ export function createAnimator(mesh, onDone) {
   }
 
   function tick(timestamp) {
+    const delta = lastTimestamp ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0.016;
+    lastTimestamp = timestamp;
+
     if (state === 'spinning') {
       const elapsed = timestamp - spinStartTime;
-      mesh.rotateOnWorldAxis(spinAxis, 8 * 0.016);
+      mesh.rotateOnWorldAxis(spinAxis, 8 * delta);
 
       if (elapsed >= SPIN_DURATION) {
         state = 'decelerating';
@@ -54,6 +58,7 @@ export function createAnimator(mesh, onDone) {
 
   function reset() {
     state = 'idle';
+    lastTimestamp = 0;
   }
 
   function isIdle() {
