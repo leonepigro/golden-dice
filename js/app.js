@@ -91,8 +91,10 @@ function rebuildDice() {
   statusBar.textContent = `${options.length} facce · ${diceInfo.type}`;
 }
 
+let rebuildTimer = null;
 optionsInput.addEventListener('input', () => {
-  rebuildDice();
+  clearTimeout(rebuildTimer);
+  rebuildTimer = setTimeout(rebuildDice, 150);
 });
 
 canvasWrap.addEventListener('click', () => {
@@ -103,6 +105,7 @@ canvasWrap.addEventListener('click', () => {
   resultBanner.classList.remove('visible');
   hint.textContent = '';
   idleTime = 0;
+  if (currentMesh) currentMesh.position.y = 0;
   animator.roll(faceIdx, faceQuaternions);
 });
 
@@ -117,7 +120,7 @@ function renderLoop(timestamp) {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
 renderDropdown();

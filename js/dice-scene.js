@@ -35,6 +35,7 @@ export function createScene(container) {
   function onResize() {
     const newSize = Math.min(container.clientWidth, container.clientHeight);
     renderer.setSize(newSize, newSize);
+    camera.updateProjectionMatrix();
   }
   window.addEventListener('resize', onResize);
 
