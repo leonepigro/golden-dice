@@ -120,5 +120,5 @@ if ('serviceWorker' in navigator) {
 }
 
 renderDropdown();
-loadSessionIntoInput(0);
+if (sessions.length > 0) loadSessionIntoInput(0);
 requestAnimationFrame(renderLoop);
