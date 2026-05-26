@@ -1,7 +1,8 @@
 {
   "name": "Amichetto",
   "short_name": "Amichetto",
-  "start_url": "/",
+  "start_url": "/golden-dice/",
+  "scope": "/golden-dice/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#12100a",
