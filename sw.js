@@ -1,4 +1,4 @@
-const CACHE = 'golden-dice-v1';
+const CACHE = 'golden-dice-v2';
 const ASSETS = [
   '/',
   '/index.html',
