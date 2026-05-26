@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { parseCSV, getDiceType } from './dice-logic.js';
+import { parseCSV, getDiceType, expandToSix } from './dice-logic.js';
 import { loadSessions, saveSession } from './sessions.js';
 import { createScene } from './dice-scene.js';
 import { buildGeometry, getFaceQuaternions } from './dice-geometry.js';
@@ -45,7 +45,7 @@ sessionSelect.addEventListener('change', () => {
 });
 
 function rebuildDice() {
-  options = parseCSV(optionsInput.value);
+  options = expandToSix(parseCSV(optionsInput.value));
   const valid = options.length >= 2;
 
   minWarn.style.display = valid ? 'none' : 'block';

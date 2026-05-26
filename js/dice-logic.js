@@ -15,6 +15,15 @@ export function getDiceType(n) {
   return DICE_MAP.find(d => n >= d.min && n <= d.max) ?? DICE_MAP[DICE_MAP.length - 1];
 }
 
+export function expandToSix(options) {
+  const n = options.length;
+  if (n < 2 || n >= 6 || 6 % n !== 0) return options;
+  const times = 6 / n;
+  const out = [];
+  for (let i = 0; i < times; i++) out.push(...options);
+  return out;
+}
+
 export function getFontSize(text) {
   const len = text.length;
   if (len <= 2) return 80;
