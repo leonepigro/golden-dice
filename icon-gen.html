@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<canvas id="c" width="192" height="192"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+ctx.fillStyle = '#12100a';
+ctx.fillRect(0, 0, 192, 192);
+const grad = ctx.createLinearGradient(16, 16, 176, 176);
+grad.addColorStop(0, '#f59e0b');
+grad.addColorStop(1, '#fbbf24');
+ctx.fillStyle = grad;
+ctx.beginPath();
+ctx.roundRect(24, 24, 144, 144, 24);
+ctx.fill();
+ctx.fillStyle = '#12100a';
+ctx.font = '900 80px system-ui';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('🎲', 96, 100);
+const a = document.createElement('a');
+a.download = 'icon-192.png';
+a.href = c.toDataURL();
+document.body.appendChild(a);
+a.click();
+</script>

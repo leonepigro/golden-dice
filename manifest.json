@@ -1,0 +1,10 @@
+{
+  "name": "Golden Dice",
+  "short_name": "Golden Dice",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#12100a",
+  "theme_color": "#f59e0b",
+  "icons": [{ "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }]
+}
