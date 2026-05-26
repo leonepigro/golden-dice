@@ -99,10 +99,11 @@ canvasWrap.addEventListener('click', () => {
   if (!animator || !animator.isIdle() || options.length < 2) return;
   const idx = Math.floor(Math.random() * options.length);
   lastResult = options[idx];
+  const faceIdx = idx % faceQuaternions.length;
   resultBanner.classList.remove('visible');
   hint.textContent = '';
   idleTime = 0;
-  animator.roll(idx, faceQuaternions);
+  animator.roll(faceIdx, faceQuaternions);
 });
 
 function renderLoop(timestamp) {
