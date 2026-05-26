@@ -5,7 +5,7 @@
 <body>
 <pre id="out"></pre>
 <script type="module">
-import { saveSession, loadSessions } from '../js/sessions.js';
+import { saveSession, loadSessions, storeSessions } from '../js/sessions.js';
 
 const out = document.getElementById('out');
 let passed = 0, failed = 0;
@@ -25,6 +25,7 @@ test('loadSessions returns defaults when localStorage empty', () => {
   const s = loadSessions();
   eq(s.length, 5);
   eq(s[0].csv, '1, X, 2, No Gol, Gol, Under, Over');
+  eq(s[0].label, '1/X/2+');
 });
 
 test('saveSession prepends new session', () => {
@@ -50,6 +51,16 @@ test('saveSession does not duplicate existing csv', () => {
   s = saveSession(s, csv);
   eq(s.length, 5);
   eq(s[0].csv, csv);
+});
+
+test('storeSessions persists to localStorage', () => {
+  localStorage.clear();
+  const s = loadSessions();
+  storeSessions(s);
+  const raw = localStorage.getItem('dice_sessions');
+  if (!raw) throw new Error('nothing written to localStorage');
+  const parsed = JSON.parse(raw);
+  eq(parsed.length, 5);
 });
 
 out.innerHTML += `\n<strong>${passed} passed, ${failed} failed</strong>\n`;
