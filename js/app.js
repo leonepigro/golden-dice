@@ -77,6 +77,7 @@ function rebuildDice() {
   const mats = buildMaterials(options, geo.groups.length);
 
   currentMesh = new THREE.Mesh(geo, mats);
+  currentMesh.rotation.set(0.31, -0.44, 0); // 3 faces visible, matches CSS prototype
   scene.add(currentMesh);
 
   animator = createAnimator(currentMesh, () => {

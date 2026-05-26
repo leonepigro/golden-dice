@@ -21,11 +21,25 @@ function goldGradient(ctx) {
   return g;
 }
 
+const FACE_INSET = 10;
+const FACE_RADIUS = 28;
+
+function drawRoundedFace(ctx) {
+  ctx.beginPath();
+  ctx.roundRect(FACE_INSET, FACE_INSET, TEX_SIZE - FACE_INSET * 2, TEX_SIZE - FACE_INSET * 2, FACE_RADIUS);
+}
+
 function makeFaceMaterial(text) {
   const canvas = makeCanvas(ctx => {
-    ctx.fillStyle = goldGradient(ctx);
+    // Dark edge — visible at face corners creating rounded look
+    ctx.fillStyle = '#0e0b06';
     ctx.fillRect(0, 0, TEX_SIZE, TEX_SIZE);
 
+    drawRoundedFace(ctx);
+    ctx.fillStyle = goldGradient(ctx);
+    ctx.fill();
+
+    drawRoundedFace(ctx);
     const inner = ctx.createRadialGradient(
       TEX_SIZE / 2, TEX_SIZE / 2, TEX_SIZE * 0.3,
       TEX_SIZE / 2, TEX_SIZE / 2, TEX_SIZE * 0.72
@@ -33,7 +47,7 @@ function makeFaceMaterial(text) {
     inner.addColorStop(0, 'rgba(0,0,0,0)');
     inner.addColorStop(1, 'rgba(0,0,0,0.18)');
     ctx.fillStyle = inner;
-    ctx.fillRect(0, 0, TEX_SIZE, TEX_SIZE);
+    ctx.fill();
 
     ctx.fillStyle = '#12100a';
     ctx.textAlign = 'center';
@@ -70,8 +84,11 @@ function makeFaceMaterial(text) {
 
 function makeDecorativeMaterial() {
   const canvas = makeCanvas(ctx => {
-    ctx.fillStyle = goldGradient(ctx);
+    ctx.fillStyle = '#0e0b06';
     ctx.fillRect(0, 0, TEX_SIZE, TEX_SIZE);
+    drawRoundedFace(ctx);
+    ctx.fillStyle = goldGradient(ctx);
+    ctx.fill();
     ctx.fillStyle = 'rgba(18,16,10,0.3)';
     ctx.font = '900 60px system-ui';
     ctx.textAlign = 'center';
