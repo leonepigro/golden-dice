@@ -32,23 +32,25 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
   e.respondWith(
     caches.match(e.request).then(async cached => {
       if (cached) return cached;
-      const response = await fetch(e.request);
-      // Fix 2: don't cache opaque responses (CDN cross-origin with status 0) or errors
-      if (
-        response &&
-        response.status === 200 &&
-        response.type !== 'error' &&
-        response.type !== 'opaque'
-      ) {
-        const clone = response.clone();
-        // Fix 3: await the cache put to surface errors (non-blocking for caller)
-        const cache = await caches.open(CACHE);
-        await cache.put(e.request, clone);
+      try {
+        const response = await fetch(e.request);
+        if (
+          response &&
+          response.status === 200 &&
+          response.type !== 'error' &&
+          response.type !== 'opaque'
+        ) {
+          const clone = response.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+        }
+        return response;
+      } catch (_) {
+        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
       }
-      return response;
     })
   );
 });
