@@ -1,11 +1,11 @@
 const STORAGE_KEY = 'dice_sessions';
 
 export const DEFAULT_SESSIONS = [
+  { label: '1/X/2',  csv: '1,X,2' },
   { label: '1/X/2+', csv: '1, X, 2, No Gol, Gol, Under, Over' },
-  { label: '1-10', csv: '1,2,3,4,5,6,7,8,9,10' },
-  { label: '1/X/2', csv: '1,X,2' },
-  { label: 'No Gol', csv: 'No Gol, Gol' },
-  { label: 'Under', csv: 'Under, Over' },
+  { label: '1-10',   csv: '1,2,3,4,5,6,7,8,9,10' },
+  { label: 'Amici',  csv: 'Fel,Cos,Mul,Sec,Luc,Max,Fab,Cla,Ian' },
+  { label: 'Esiti',  csv: 'Under, Over, No Gol, Gol' },
 ];
 
 export function loadSessions() {
