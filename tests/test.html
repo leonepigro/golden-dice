@@ -6,6 +6,7 @@
 <pre id="out"></pre>
 <script type="module">
 import { saveSession, loadSessions, storeSessions } from '../js/sessions.js';
+import { parseCSV, getDiceType, getFontSize } from '../js/dice-logic.js';
 
 const out = document.getElementById('out');
 let passed = 0, failed = 0;
@@ -62,6 +63,31 @@ test('storeSessions persists to localStorage', () => {
   const parsed = JSON.parse(raw);
   eq(parsed.length, 5);
 });
+
+// ---- dice-logic tests ----
+test('parseCSV splits by comma and trims', () => {
+  eq(parseCSV('A, B,  C '), ['A', 'B', 'C']);
+});
+test('parseCSV filters empty entries', () => {
+  eq(parseCSV('A,,B, ,C'), ['A', 'B', 'C']);
+});
+test('parseCSV returns empty array for blank string', () => {
+  eq(parseCSV('   '), []);
+});
+test('getDiceType 2 → d4', () => eq(getDiceType(2).type, 'd4'));
+test('getDiceType 4 → d4', () => eq(getDiceType(4).type, 'd4'));
+test('getDiceType 5 → d6', () => eq(getDiceType(5).type, 'd6'));
+test('getDiceType 6 → d6', () => eq(getDiceType(6).type, 'd6'));
+test('getDiceType 7 → d8', () => eq(getDiceType(7).type, 'd8'));
+test('getDiceType 9 → d10', () => eq(getDiceType(9).type, 'd10'));
+test('getDiceType 11 → d12', () => eq(getDiceType(11).type, 'd12'));
+test('getDiceType 13 → d20', () => eq(getDiceType(13).type, 'd20'));
+test('getDiceType 99 → d20', () => eq(getDiceType(99).type, 'd20'));
+test('getFontSize 1 char → 120', () => eq(getFontSize('X'), 120));
+test('getFontSize 2 chars → 120', () => eq(getFontSize('1X'), 120));
+test('getFontSize 3 chars → 80', () => eq(getFontSize('ABC'), 80));
+test('getFontSize 5 chars → 80', () => eq(getFontSize('Under'), 80));
+test('getFontSize 6 chars → 52', () => eq(getFontSize('No Gol'), 52));
 
 out.innerHTML += `\n<strong>${passed} passed, ${failed} failed</strong>\n`;
 </script>
